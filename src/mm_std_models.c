@@ -887,8 +887,8 @@ int bond_species_source(int species_no, /* Current species number */
   }
 
   /* clip negative values */
-  if (nn < 1.e-5)
-    nn = 1.e-5;
+  if (nn < 1.e-7)
+    nn = 1.e-7;
 
   /**********************************************************/
 
