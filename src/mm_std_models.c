@@ -912,9 +912,6 @@ int bond_species_source(int species_no, /* Current species number */
     var = SHEAR_RATE;
     if (pd->v[pg->imtrx][var]) {
       mp->d_species_source[var] = -k1 * nn * d_gterm_a + k2 * (n0 - nn) * d_gterm_b;
-      if (nn_clip) {
-        mp->d_species_source[var] = 0.0;
-      }
     }
   }
   return 0;
