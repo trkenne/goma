@@ -861,6 +861,7 @@ int bond_species_source(int species_no, /* Current species number */
   dbl gterm_a, gterm_b;
   dbl d_gterm_a, d_gterm_b;
   dbl offset = 0.00001;
+  bool nn_clip = false;
 
   /* Begin Execution */
 
@@ -887,9 +888,10 @@ int bond_species_source(int species_no, /* Current species number */
   }
 
   /* clip negative values */
-  if (nn < 1.e-7)
+  if (nn < 1.e-7) {
     nn = 1.e-7;
-
+    nn_clip = true;
+  }
   /**********************************************************/
 
   /* Species piece */
@@ -902,11 +904,17 @@ int bond_species_source(int species_no, /* Current species number */
     if (pd->v[pg->imtrx][var]) {
       var_offset = MAX_VARIABLE_TYPES + species_no;
       mp->d_species_source[var_offset] = -k1 * gterm_a - k2 * gterm_b;
+      if (nn_clip) {
+        mp->d_species_source[var_offset] = 0.0;
+      }
     }
 
     var = SHEAR_RATE;
     if (pd->v[pg->imtrx][var]) {
       mp->d_species_source[var] = -k1 * nn * d_gterm_a + k2 * (n0 - nn) * d_gterm_b;
+      if (nn_clip) {
+        mp->d_species_source[var] = 0.0;
+      }
     }
   }
   return 0;
